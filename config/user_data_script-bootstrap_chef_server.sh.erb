@@ -28,6 +28,10 @@ apt-get -f install ;
 
 echo "`date` Installing base packages"  >> $progresslog 
 apt-get install -y ruby ruby1.8-dev libopenssl-ruby1.8 rubygems ri irb build-essential wget ssl-cert git-core zlib1g-dev libxml2-dev runit runit-services;
+echo "`date` Restarting runit (stupid Lucid bug? http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=595334)" >> $progresslog
+dpkg-reconfigure runit >> $progresslog
+kill -s HUP 1
+dpkg-reconfigure runit >> $progresslog
 echo "`date` Unchaining rubygems from the tyrrany of ubuntu"  >> $progresslog 
 gem install --no-rdoc --no-ri rubygems-update --version=1.3.7 ; /var/lib/gems/1.8/bin/update_rubygems; gem update --no-rdoc --no-ri --system ; gem --version ;
 
@@ -55,20 +59,20 @@ sysctl   -w kernel.hostname=$HOSTNAME ;
 sed -i "s/127.0.0.1 *localhost/127.0.0.1      $HOSTNAME `hostname -s` localhost/" /etc/hosts
 if grep -q $PUBLIC_IP /etc/hosts  ; then true ; else bash -c "echo '$PUBLIC_IP $HOSTNAME `hostname -s ` chef.infinitemonkeys.info chef' >> /etc/hosts" ; fi
 
-# echo "`date` Install chef gem"  >> $progresslog
-# sudo gem install --no-rdoc --no-ri chef
-# echo "`date` Bootstrap chef server"  >> $progresslog
-# echo '{ "bootstrap": { "chef": { "server_fqdn":"<%= chef_server_fqdn %>", "url_type":"http", "init_style":"runit", "server_port":"4000", "webui_port":"4040", "webui_enabled":true, "path":"/srv/chef", "serve_path":"/srv/chef" } }, "run_list": [ "recipe[bootstrap::server]" ] }' > /tmp/chef_server.json ;
-# wget -nv ${REMOTE_FILE_URL_BASE}/chef_bootstrap.rb -O /tmp/chef_bootstrap.rb ;
-# sudo stop runsvdir ;
-# chef-solo -c /tmp/chef_bootstrap.rb -j /tmp/chef_server.json  >> $progresslog
-# 
-# echo "`date` Pulling in chef client and server scripts"  >> $progresslog 
-# cp /etc/chef/client.rb /etc/chef/client-orig.rb ;
-# wget -nv ${REMOTE_FILE_URL_BASE}/client.rb -O /etc/chef/client.rb ;
-# cat > /etc/chef/client-config.json <<EOF
-# <%= chef_config[:attributes].to_json %>
-# EOF
+ echo "`date` Install chef gem"  >> $progresslog
+sudo gem install --no-rdoc --no-ri chef
+echo "`date` Bootstrap chef server"  >> $progresslog
+echo '{ "chef": { "server_fqdn":"<%= chef_server_fqdn %>", "url_type":"http", "init_style":"runit", "server_port":"4000", "webui_port":"4040", "webui_enabled":true, "path":"/srv/chef", "serve_path":"/srv/chef" }, "run_list": [ "recipe[chef::bootstrap_server]" ] }' > /tmp/chef_server.json ;
+wget -nv ${REMOTE_FILE_URL_BASE}/chef_bootstrap.rb -O /tmp/chef_bootstrap.rb ;
+sudo stop runsvdir ;
+chef-solo -c /tmp/chef_bootstrap.rb -j /tmp/chef_server.json  >> $progresslog
+
+echo "`date` Pulling in chef client and server scripts"  >> $progresslog 
+cp /etc/chef/client.rb /etc/chef/client-orig.rb ;
+wget -nv ${REMOTE_FILE_URL_BASE}/client.rb -O /etc/chef/client.rb ;
+cat > /etc/chef/client-config.json <<EOF
+<%= chef_config[:attributes].to_json %>
+EOF
 
 echo "`date` Cleanup"  >> $progresslog 
 apt-get autoremove;
