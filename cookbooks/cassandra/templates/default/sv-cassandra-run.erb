@@ -1,5 +1,5 @@
 #!/bin/sh
-export JAVA_HOME=/usr/lib/jvm/java-6-sun/jre CASSANDRA_CONF=/etc/cassandra/storage-conf.xml CASSANDRA_HOME=/usr/local/share/cassandra
+export JAVA_HOME=/usr/lib/jvm/java-6-sun/jre CASSANDRA_CONF=/etc/cassandra/ CASSANDRA_HOME=/usr/local/share/cassandra
 
 cassandra_home=<%= node[:cassandra][:cassandra_home] %>
 cassandra_bin=${cassandra_home}/build/classes

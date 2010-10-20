@@ -1,4 +1,13 @@
 [
+{"id":"pegasus",
+"master":     [],
+"chefmaster": [], 
+"slave":      [],
+"cassandra_node":   [
+  [ { "device": "/dev/sdj1", "volume_id": "vol-3e080657", "type":"lvm", "options": "" } ],
+  [ { "device": "/dev/sdj1", "volume_id": "vol-2608064f", "type":"lvm", "options": "" } ]
+  ]
+},
 {"id":"zaius",
   "master":     [],
   "chefmaster": [], 

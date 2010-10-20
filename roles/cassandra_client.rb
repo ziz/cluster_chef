@@ -6,8 +6,9 @@ run_list *%w[
   runit
   boost
   thrift
+  python
   cassandra
-  cassandra::install_from_git
+  cassandra::install_from_release
   ]
 
 # Attributes applied if the node doesn't have it set already.

@@ -1,6 +1,9 @@
 [
 {
   "id": "clusters",
+  "pegasus": {
+      "rpc_addr": "0.0.0.0"
+  },
   "gibbon": {
     "keyspaces": [
       { "name":                       "soc_net_tw",

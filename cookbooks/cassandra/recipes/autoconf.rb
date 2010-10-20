@@ -62,7 +62,7 @@ cassandra_cluster_name = node[:cassandra][:cluster_name] + '-cassandra'
 
 # Configure the various addrs for binding
 node[:cassandra][:listen_addr] = private_ip_of(node)
-node[:cassandra][:rpc_addr]    = private_ip_of(node)
+node[:cassandra][:rpc_addr]    = private_ip_of(node) if node[:cassandra][:rpc_addr].blank?
 # And find out who all else provides cassandra in our cluster
 all_seeds  = all_provider_private_ips(cassandra_cluster_name+'-seed')
 all_seeds  = [private_ip_of(node), all_seeds] if (all_seeds.length < 2)

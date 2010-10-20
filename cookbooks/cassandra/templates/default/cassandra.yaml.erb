@@ -23,6 +23,9 @@ hinted_handoff_enabled:                 <%= node[:cassandra][:hinted_handoff_ena
 # authentication backend, implementing IAuthenticator; used to limit keyspace access
 authenticator:                          <%= node[:cassandra][:authenticator] %>                         # org.apache.cassandra.auth.AllowAllAuthenticator
 
+# authorization backend, implementing IAuthority; used to limit access/provide permissions
+authority:                          <%= node[:cassandra][:authority] %>                         # org.apache.cassandra.auth.AllowAllAuthority
+
 # any IPartitioner may be used, including your own as long as it is on
 # the classpath.  Out of the box, Cassandra provides
 # org.apache.cassandra.dht.RandomPartitioner
@@ -82,9 +85,16 @@ storage_port:                           <%= node[:cassandra][:storage_port] %>  
 listen_address:                         <%= node[:cassandra][:listen_addr] %>                           # localhost
 
 # The address to bind the Thrift RPC service to
-rpc_address:                            <%= node[:cassandra][:rpc_addr] %>                              # localhost
+rpc_address:                            <%= node[:cassandra][:rpc_addr] %>  # 0.0.0.0
 # port for Thrift to listen on
 rpc_port:                               <%= node[:cassandra][:rpc_port] %>                              # 9160
+
+# enable or disable keepalive on rpc connections
+rpc_keepalive:                          <%= node[:cassandra][:rpc_keepalive] %>                         # true
+
+# uncomment to set socket buffer sizes on rpc connections
+# rpc_send_buff_size_in_bytes:
+# rpc_recv_buff_size_in_bytes:
 
 # Frame size for thrift (maximum field length).
 # 0 disables TFramedTransport in favor of TSocket. 
@@ -95,6 +105,10 @@ thrift_framed_transport_size_in_mb:     <%= node[:cassandra][:thrift_framed_tran
 thrift_max_message_length_in_mb:        <%= node[:cassandra][:thrift_max_message_length] %>             # 16
 
 snapshot_before_compaction:             <%= node[:cassandra][:snapshot_before_compaction] %>            # false
+
+# change this to increase the compaction thread's priority.  In java, 1 is the
+# lowest priority and that is our default.
+# compaction_thread_priority: 1
 
 # The threshold size in megabytes the binary memtable must grow to,
 # before it's submitted for flushing to disk.
@@ -184,6 +198,11 @@ request_scheduler:                      <%= node[:cassandra][:request_scheduler]
 # the request scheduling. The current supported option is "keyspace"
 request_scheduler_id:                   <%= node[:cassandra][:request_scheduler_id] %>                  # keyspace
 
+# The Index Interval determines how large the sampling of row keys
+#  is for a given SSTable. The larger the sampling, the more effective
+#  the index is at the cost of space.
+index_interval: 128
+
 # A ColumnFamily is the Cassandra concept closest to a relational table. 
 #
 # Keyspaces are separate groups of ColumnFamilies.  Except in very
@@ -261,4 +280,47 @@ request_scheduler_id:                   <%= node[:cassandra][:request_scheduler_
 #       Cassandra will not load these definitions during startup. See
 #       http://wiki.apache.org/cassandra/FAQ#no_keyspaces for an explanation.
 keyspaces:
-    <%= JSON.load(node[:cassandra][:keyspaces].to_json).to_yaml.split(/\n/)[1..-1].join("\n    ") %>
+  - name: Keyspace1
+    replica_placement_strategy: org.apache.cassandra.locator.SimpleStrategy
+    replication_factor: 1
+    column_families:
+      - name: Standard1
+        compare_with: BytesType
+
+      - name: Standard2
+        compare_with: UTF8Type
+        read_repair_chance: 0.1
+        keys_cached: 100
+        gc_grace_seconds: 0
+        min_compaction_threshold: 5
+        max_compaction_threshold: 31
+
+      - name: StandardByUUID1
+        compare_with: TimeUUIDType
+
+      - name: Super1
+        column_type: Super
+        compare_with: BytesType
+        compare_subcolumns_with: BytesType
+
+      - name: Super2
+        column_type: Super
+        compare_subcolumns_with: UTF8Type
+        preload_row_cache: true
+        rows_cached: 10000
+        keys_cached: 50
+        comment: 'A column family with supercolumns, whose column and subcolumn names are UTF8 strings'
+
+      - name: Super3
+        column_type: Super
+        compare_with: LongType
+        comment: 'A column family with supercolumns, whose column names are Longs (8 bytes)'
+
+      - name: Indexed1
+        default_validation_class: LongType
+        column_metadata:
+          - name: birthdate
+            validator_class: LongType
+            index_type: KEYS
+  
+    <%#= JSON.load(node[:cassandra][:keyspaces].to_json).to_yaml.split(/\n/)[1..-1].join("\n    ") %>

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: apt
+# Cookbook Name:: java
 # Recipe:: default
 #
 # Copyright 2008-2009, Opscode, Inc.
@@ -17,28 +17,19 @@
 # limitations under the License.
 #
 
-d = execute "dpkg --configure -a" do
-  action :nothing
-  ignore_failure true
-end
+sunjava_pkg = value_for_platform(
+  [ "ubuntu", "debian" ] => {
+    "default" => "sun-java6-jdk"
+  },
+  [ "redhat", "centos", "fedora" ] => {
+    "default" => "java-1.6.0-openjdk"
+  },
+  "default" => "sun-java6-jdk"
+)
 
-e = execute "apt-get update" do
-  action :nothing
-  ignore_failure true
-end
-
-begin
-  d.run_action(:run)
-  e.run_action(:run)  
-rescue Exception => e
-  # pass
-end
-
-%w{/var/cache/local /var/cache/local/preseeding}.each do |dirname|
-  directory dirname do
-    owner "root"
-    group "root"
-    mode  0755
-    action :create
+package sunjava_pkg do
+  action :install
+  if platform?("ubuntu", "debian")
+    response_file "java.seed"
   end
 end

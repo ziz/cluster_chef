@@ -45,6 +45,7 @@ default[:cassandra][:jmx_port]                      = 12345         # moved from
 # Partitioning
 default[:cassandra][:auto_bootstrap]                = 'false'
 default[:cassandra][:authenticator]                 = "org.apache.cassandra.auth.AllowAllAuthenticator"
+default[:cassandra][:authority]                     = "org.apache.cassandra.auth.AllowAllAuthority"
 default[:cassandra][:hinted_handoff_enabled]        = 'true'
 default[:cassandra][:partitioner]                   = "org.apache.cassandra.dht.RandomPartitioner"       # "org.apache.cassandra.dht.OrderPreservingPartitioner"
 default[:cassandra][:endpoint_snitch]               = "org.apache.cassandra.locator.SimpleSnitch"
@@ -72,13 +73,14 @@ default[:cassandra][:commitlog_rotation_threshold]  = 128
 default[:cassandra][:commitlog_sync]                = "periodic"
 default[:cassandra][:commitlog_sync_period]         = 10000
 default[:cassandra][:rpc_timeout_in_ms]             = 10000
+default[:cassandra][:rpc_keepalive]                 = 'true'
 default[:cassandra][:phi_convict_threshold]         = 8
 default[:cassandra][:request_scheduler]             = 'org.apache.cassandra.scheduler.NoScheduler'
 default[:cassandra][:throttle_limit]                = 80           # 2x (concurrent_reads + concurrent_writes)
 default[:cassandra][:request_scheduler_id]          = 'keyspace'
 
 # For install_from_release recipe
-default[:cassandra][:install_url] = "http://apache.mirrors.tds.net/cassandra/0.6.1/apache-cassandra-0.6.1-bin.tar.gz"
+default[:cassandra][:install_url] = "http://mirror.cloudera.com/apache//cassandra/0.7.0/apache-cassandra-0.7.0-beta2-bin.tar.gz"
 # For install_from_git
 default[:cassandra][:git_repo]                      = 'git://git.apache.org/cassandra.git'
 # until ruby gem is updated, use cdd239dcf82ab52cb840e070fc01135efb512799

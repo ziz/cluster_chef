@@ -6,6 +6,7 @@ run_list *%w[
   aws
   ubuntu
   java
+  python
   ]
 
 # Attributes applied if the node doesn't have it set already.

@@ -14,6 +14,7 @@ remote_file "/usr/local/src/"+cassandra_install_pkg do
   source    node[:cassandra][:install_url]
   mode      "0644"
   action :create
+  not_if { File.exists?('/usr/local/src/"+cassandra_install_pkg') }
 end
 
 bash 'install from tarball' do
@@ -22,8 +23,8 @@ bash 'install from tarball' do
   code <<EOF
   tar xzf /usr/local/src/#{cassandra_install_pkg}
   cd  #{cassandra_install_dir}
-  mv                conf/storage-conf.xml conf/storage-conf.xml.orig
-  ln -nfs /etc/cassandra/storage-conf.xml conf/storage-conf.xml
+  #mv                conf/storage-conf.xml conf/storage-conf.xml.orig
+  #ln -nfs /etc/cassandra/storage-conf.xml conf/storage-conf.xml
   if [ -e build.xml ] ; then
     ant ivy-retrieve
     ant build

@@ -24,10 +24,10 @@ module AwsServiceData
     %w[eu-west-1             64-bit  instance        lucid       ] => 'ami-a54d67d1',
     %w[eu-west-1             32-bit  instance        lucid       ] => 'ami-cf4d67bb',
 
-    %w[us-east-1             64-bit  ebs             lucid       ] => 'ami-4b4ba522',
-    %w[us-east-1             32-bit  ebs             lucid       ] => 'ami-714ba518',
-    %w[us-east-1             64-bit  instance        lucid       ] => 'ami-fd4aa494',
-    %w[us-east-1             32-bit  instance        lucid       ] => 'ami-2d4aa444',
+    %w[us-east-1             64-bit  ebs             lucid       ] => 'ami-6006f309',
+    %w[us-east-1             32-bit  ebs             lucid       ] => 'ami-6c06f305',
+    %w[us-east-1             64-bit  instance        lucid       ] => 'ami-ac07f2c5',
+    %w[us-east-1             32-bit  instance        lucid       ] => 'ami-6407f20d',
 
     %w[us-west-1             64-bit  ebs             lucid       ] => 'ami-d197c694',
     %w[us-west-1             32-bit  ebs             lucid       ] => 'ami-cb97c68e',
@@ -36,6 +36,7 @@ module AwsServiceData
     #
     %w[us-east-1             32-bit  instance        opscode-chef-client ] => 'ami-17f51c7e',
     %w[us-east-1             64-bit  instance        opscode-chef-client ] => 'ami-eff51c86',
+    
     # Public AMIs, compatible with chef 0.9+ only
     %w[us-east-1             32-bit  ebs             infochimps-chef-client    ] => 'ami-449a722d', # infochimps.chef-client.lucid.east.32bit.20100610a
     %w[us-east-1             64-bit  ebs             infochimps-chef-client    ] => '', # infochimps.chef-client.lucid.east.64bit.20100612

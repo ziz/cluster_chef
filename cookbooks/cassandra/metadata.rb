@@ -11,6 +11,7 @@ depends           "runit"
 depends           "thrift"
 depends           "ebs"
 depends           "cluster_service_discovery"
+depends           "python"
 
 %w{ubuntu debian}.each do |os|
   supports os
@@ -100,7 +101,7 @@ attribute "cassandra/storage_port",
 attribute "cassandra/rpc_addr",
   :display_name => "",
   :description => "",
-  :default => "localhost"
+  :default => "0.0.0.0"
 
 attribute "cassandra/rpc_port",
   :display_name => "",

@@ -21,6 +21,7 @@
 include_recipe "java"
 include_recipe "thrift"
 include_recipe "runit"
+include_recipe "python"
 
 %w[ cassandra avro
 ].each{|pkg| gem_package(pkg){ action :install } }

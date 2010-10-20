@@ -4,6 +4,7 @@ description "Attaches ebs volumes"
 run_list *%w[
   aws
   xfs
+  lvm
   ebs::attach_volumes_from_cluster_role_index
 ]
 

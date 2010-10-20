@@ -6,6 +6,7 @@ require 'configliere'
 Settings.read File.join(ENV['HOME'],'.poolparty','aws'); Settings.resolve!
 
 run_list *%w[
+  java::sunjava
   hadoop_cluster
   hadoop_cluster::cluster_conf
   ]
