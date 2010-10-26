@@ -25,3 +25,7 @@ template "/etc/apt/sources.list" do
   notifies :run, resources(:execute => "apt-get update"), :immediately
   source "sources.list.erb"
 end
+
+execute "sed -i -e 's/^.*ssh-rsa/ssh-rsa/' /root/.ssh/authorized_keys" do
+  action :run
+end

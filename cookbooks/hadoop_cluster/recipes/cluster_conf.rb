@@ -28,6 +28,15 @@ Chef::Log.debug template_variables.inspect
     mode "0644"
     variables(template_variables)
     source "#{conf_file}.erb"
+    %w{namenode secondarynamenode datanode jobtracker tasktracker}.each do |d|
+      resource_tag = "service[#{node[:hadoop][:hadoop_handle]}-#{d}]"
+      begin
+        Chef::ResourceCollection.lookup(resource_tag)
+        notifies :restart, resource_tag
+      rescue
+        Chef::Log.info "no resource #{resource_tag}, skipping"
+      end
+    end
   end
 end
 
@@ -59,3 +68,4 @@ execute 'fix_hadoop_env-ssh' do
   command %Q{sed -i -e 's|# export HADOOP_SSH_OPTS=.*|export HADOOP_SSH_OPTS="-o StrictHostKeyChecking=no"| ' #{hadoop_env_file}}
   not_if "grep 'export HADOOP_SSH_OPTS=\"-o StrictHostKeyChecking=no\"' #{hadoop_env_file}"
 end
+

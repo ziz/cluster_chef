@@ -25,4 +25,6 @@ execute 'format_namenode' do
   user 'hadoop'
   creates '/mnt/hadoop/hdfs/name/current/VERSION'
   creates '/mnt/hadoop/hdfs/name/current/fsimage'
+  not_if { File.exists?('/mnt/hadoop/hdfs/name/current/VERSION') }
+  not_if { File.exists?('/mnt/hadoop/hdfs/name/current/fsimage') }
 end

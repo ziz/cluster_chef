@@ -18,7 +18,7 @@ pool POOL_NAME do
     settings = settings_for_node(POOL_NAME, :chefmaster)
     instances                   1
     is_generic_node             settings
-    is_nfs_server               settings
+    #is_nfs_server               settings
     is_chef_server              settings
     #
     is_hadoop_node              settings
@@ -62,7 +62,7 @@ pool POOL_NAME do
     instances                   1
     # Order matters here: specifically, attaches_ebs > nfs_client > most things
     is_generic_node             settings
-    is_nfs_client               settings
+    #is_nfs_client               settings
     is_chef_client              settings
     #
     is_hadoop_node              settings
@@ -82,7 +82,7 @@ pool POOL_NAME do
     instances                   (settings[:instances] || 3)
     #
     is_generic_node             settings
-    is_nfs_client               settings
+    #is_nfs_client               settings
     is_chef_client              settings
     #
     is_hadoop_node              settings

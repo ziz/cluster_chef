@@ -72,3 +72,15 @@ end
 package "#{node[:hadoop][:hadoop_handle]}-native" do
   version "0.20.2+320-1~lucid-cdh3b2"
 end
+
+bash 'Push compatible Jackson into hadoop if hadoop exists' do
+  code <<EOF
+mv /usr/lib/hadoop/lib/jackson-*1.0.1.jar /tmp && true ;
+cd /usr/lib/hadoop/lib
+curl -LO http://static.mapmyfitness.com/hdp/jackson-core-asl-1.4.0.jar
+curl -LO http://static.mapmyfitness.com/hdp/jackson-mapper-asl-1.4.0.jar
+true
+EOF
+  only_if{ File.exists?('/usr/lib/hadoop/lib') }
+  only_if{ Dir['/usr/lib/hadoop/lib/jackson*1.4*'].blank? }
+end
