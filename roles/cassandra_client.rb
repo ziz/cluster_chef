@@ -2,13 +2,13 @@ name        'cassandra_client'
 description 'Part of a cassandra database'
 
 run_list *%w[
-  java
+  java::sunjava
   runit
   boost
   thrift
   python
   cassandra
-  cassandra::install_from_release
+  cassandra::install_from_git
   ]
 
 # Attributes applied if the node doesn't have it set already.

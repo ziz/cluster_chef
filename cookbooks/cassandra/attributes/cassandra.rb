@@ -37,6 +37,7 @@ default[:cassandra][:cassandra_home]                = '/usr/local/share/cassandr
 default[:cassandra][:cassandra_conf]                = '/etc/cassandra'
 default[:cassandra][:data_file_dirs]                = ["/data/db/cassandra"]
 default[:cassandra][:commitlog_dir]                 = "/mnt/cassandra/commitlog"
+default[:cassandra][:savedcaches_dir]                 = "/mnt/cassandra/saved_caches"
 default[:cassandra][:listen_addr]                   = "localhost"
 default[:cassandra][:storage_port]                  = 7000
 default[:cassandra][:rpc_addr]                      = "localhost"
@@ -84,7 +85,7 @@ default[:cassandra][:install_url] = "http://mirror.cloudera.com/apache//cassandr
 # For install_from_git
 default[:cassandra][:git_repo]                      = 'git://git.apache.org/cassandra.git'
 # until ruby gem is updated, use cdd239dcf82ab52cb840e070fc01135efb512799
-default[:cassandra][:git_revision]                  = 'cdd239dcf82ab52cb840e070fc01135efb512799' # 'HEAD'
+default[:cassandra][:git_revision]                  = 'HEAD' #'cdd239dcf82ab52cb840e070fc01135efb512799' # 'HEAD'
 
 
 # see http://www.mail-archive.com/user@cassandra.apache.org/msg04447.html

@@ -119,11 +119,11 @@ binary_memtable_throughput_in_mb:       <%= node[:cassandra][:binary_memtable_th
 # This needs to be large enough that it won't cause a flush storm
 # of all your memtables flushing at once because none has hit
 # the size or count thresholds yet.
-memtable_flush_after_mins:              <%= node[:cassandra][:memtable_flush_after] %>                  # 60
+#memtable_flush_after_mins:              <%= node[:cassandra][:memtable_flush_after] %>                  # 60
 # Size of the memtable in memory before it is flushed`
-memtable_throughput_in_mb:              <%= node[:cassandra][:memtable_throughput] %>                   # 64
+#memtable_throughput_in_mb:              <%= node[:cassandra][:memtable_throughput] %>                   # 64
 # Number of objects in millions in the memtable before it is flushed
-memtable_operations_in_millions:        <%= node[:cassandra][:memtable_ops] %>                          # 0.3
+#memtable_operations_in_millions:        <%= node[:cassandra][:memtable_ops] %>                          # 0.3
 
 column_index_size_in_kb:                <%= node[:cassandra][:column_index_size] %>                     # 64
 
@@ -131,6 +131,9 @@ in_memory_compaction_limit_in_mb:       <%= node[:cassandra][:in_memory_compacti
 
 # commit log
 commitlog_directory:                    <%= node[:cassandra][:commitlog_dir] %>                   # /var/lib/cassandra/commitlog
+
+# saved caches
+saved_caches_directory: <%= node[:cassandra][:savedcaches_dir] %> # /var/lib/cassandra/saved_caches
 
 # Size to allow commitlog to grow to before creating a new segment 
 commitlog_rotation_threshold_in_mb:     <%= node[:cassandra][:commitlog_rotation_threshold] %>        # 128
@@ -279,48 +282,5 @@ index_interval: 128
 # NOTE: this keyspace definition is for demonstration purposes only.
 #       Cassandra will not load these definitions during startup. See
 #       http://wiki.apache.org/cassandra/FAQ#no_keyspaces for an explanation.
-keyspaces:
-  - name: Keyspace1
-    replica_placement_strategy: org.apache.cassandra.locator.SimpleStrategy
-    replication_factor: 1
-    column_families:
-      - name: Standard1
-        compare_with: BytesType
 
-      - name: Standard2
-        compare_with: UTF8Type
-        read_repair_chance: 0.1
-        keys_cached: 100
-        gc_grace_seconds: 0
-        min_compaction_threshold: 5
-        max_compaction_threshold: 31
-
-      - name: StandardByUUID1
-        compare_with: TimeUUIDType
-
-      - name: Super1
-        column_type: Super
-        compare_with: BytesType
-        compare_subcolumns_with: BytesType
-
-      - name: Super2
-        column_type: Super
-        compare_subcolumns_with: UTF8Type
-        preload_row_cache: true
-        rows_cached: 10000
-        keys_cached: 50
-        comment: 'A column family with supercolumns, whose column and subcolumn names are UTF8 strings'
-
-      - name: Super3
-        column_type: Super
-        compare_with: LongType
-        comment: 'A column family with supercolumns, whose column names are Longs (8 bytes)'
-
-      - name: Indexed1
-        default_validation_class: LongType
-        column_metadata:
-          - name: birthdate
-            validator_class: LongType
-            index_type: KEYS
-  
     <%#= JSON.load(node[:cassandra][:keyspaces].to_json).to_yaml.split(/\n/)[1..-1].join("\n    ") %>

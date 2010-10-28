@@ -39,7 +39,7 @@ pool POOL_NAME do
     instance_type               settings
     is_generic_node             settings
     is_chef_client              settings
-    user_data_is_json_hash      settings
+    has_big_package             settings
     is_cassandra_node           settings
     #
     #is_hadoop_node              settings
@@ -48,11 +48,31 @@ pool POOL_NAME do
     #has_role                    settings, "hadoop_worker"
     #has_recipe                  settings, 'hadoop_cluster::std_hdfs_dirs'
     #
-    has_big_package             settings
     has_role                    settings, "#{POOL_NAME}_cluster"
     user_data_is_bootstrap_script(settings, 'bootstrap_chef_client')
   end
 
+  #
+  cloud :cassandra_testing do
+    using :ec2
+    settings = settings_for_node(POOL_NAME, :cassandra_testing)
+    instances                   (settings[:instances] || 1)
+    instance_type               settings
+    is_generic_node             settings
+    is_chef_client              settings
+    has_big_package             settings
+    is_cassandra_node           settings
+    #
+    #is_hadoop_node              settings
+    #has_recipe                  settings, 'hadoop_cluster::format_namenode_once'
+    #has_role                    settings, "hadoop_master"
+    #has_role                    settings, "hadoop_worker"
+    #has_recipe                  settings, 'hadoop_cluster::std_hdfs_dirs'
+    #
+    has_role                    settings, "#{POOL_NAME}_cluster"
+    user_data_is_bootstrap_script(settings, 'bootstrap_chef_client')
+  end
+  
   #
   # Hadoop master, to be used with a standalone chef server and (optional) nfs server.
   #

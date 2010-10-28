@@ -29,8 +29,11 @@ bash "install_thrift" do
   user "root"
   cwd "/tmp"
   code <<-EOH
-    svn co http://svn.apache.org/repos/asf/incubator/thrift thrift
-    cd thrift/trunk;
+    curl -LO http://www.ibiblio.org/pub/mirrors/apache//incubator/thrift/0.5.0-incubating/thrift-0.5.0.tar.gz
+    tar xzf thrift-0.5.0.tar.gz
+    #ln -nsf thrift-0.5.0 thrift
+    # svn co http://svn.apache.org/repos/asf/incubator/thrift thrift
+    cd thrift-0.5.0;
     cp /usr/share/aclocal/pkg.m4 ./aclocal
     sh bootstrap.sh
     ./configure --with-boost=/usr/local --with-libevent=/usr/local --prefix=/usr/local --with-erlang=no

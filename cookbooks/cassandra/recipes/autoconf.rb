@@ -75,4 +75,23 @@ end
 # If there is an initial token, force auto_bootstrap to false.
 node[:cassandra][:auto_bootstrap] = false if node[:cassandra][:initial_token]
 
+if node[:ec2] && node[:ec2][:instance_type]
+  cassandra_settings =
+    case node[:ec2][:instance_type]
+    when 'm1.small'   then { :java_max_heap =>  '1024m' }
+    when 'c1.medium'  then { :java_max_heap =>  '1024m' }
+    when 'm1.large'   then { :java_max_heap =>  '5500m' }
+    when 'm2.xlarge'  then { :java_max_heap => '15000m' }
+    when 'c1.xlarge'  then { :java_max_heap =>  '5500m' }
+    when 'm1.xlarge'  then { :java_max_heap => '12000m' }
+    when 'm2.2xlarge' then { :java_max_heap => '30000m' }
+    when 'm2.4xlarge' then { :java_max_heap => '60000m' }
+    else {}
+    end
+    
+  cassandra_settings.each{|k,v| node[:cassandra][k] = v }
+
+end
+
+
 node.save

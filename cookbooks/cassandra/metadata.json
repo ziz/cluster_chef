@@ -1,12 +1,6 @@
 {
   "version": "0.2.2",
-  "suggestions": {
-
-  },
-  "recipes": {
-    "cassandra::iptables": "Automatically configure iptables rules for cassandra.",
-    "cassandra::ec2snitch": "Automatically configure properties snitch for clusters on EC2.",
-    "cassandra::autoconf": "Automatically configure nodes from chef-server information."
+  "recommendations": {
   },
   "attributes": {
     "cassandra/commitlog_sync": {
@@ -487,8 +481,7 @@
       "display_name": "Cassandra"
     }
   },
-  "conflicting": {
-
+  "suggestions": {
   },
   "dependencies": {
     "ebs": [
@@ -513,21 +506,23 @@
 
     ]
   },
-  "providing": {
-
+  "conflicting": {
   },
-  "maintainer": "Benjamin Black",
-  "replacing": {
-
+  "providing": {
   },
   "license": "Apache 2.0",
-  "maintainer_email": "b@b3k.us",
-  "groupings": {
-
+  "maintainer": "Benjamin Black",
+  "long_description": "",
+  "recipes": {
+    "cassandra::iptables": "Automatically configure iptables rules for cassandra.",
+    "cassandra::ec2snitch": "Automatically configure properties snitch for clusters on EC2.",
+    "cassandra::autoconf": "Automatically configure nodes from chef-server information."
+  },
+  "replacing": {
   },
   "name": "cassandra",
-  "recommendations": {
-
+  "maintainer_email": "b@b3k.us",
+  "groupings": {
   },
   "platforms": {
     "debian": [
@@ -537,6 +532,5 @@
 
     ]
   },
-  "long_description": "",
   "description": "Installs and configures the Cassandra distributed storage system"
 }
