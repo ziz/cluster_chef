@@ -35,9 +35,9 @@ default[:cassandra][:keyspaces]                     = {}
 # Directories, hosts and ports
 default[:cassandra][:cassandra_home]                = '/usr/local/share/cassandra'
 default[:cassandra][:cassandra_conf]                = '/etc/cassandra'
-default[:cassandra][:data_file_dirs]                = ["/data/db/cassandra"]
-default[:cassandra][:commitlog_dir]                 = "/mnt/cassandra/commitlog"
-default[:cassandra][:savedcaches_dir]                 = "/mnt/cassandra/saved_caches"
+default[:cassandra][:data_file_dirs]                = ["/mnt/cassandra/data"]
+default[:cassandra][:commitlog_dir]                 = "/data/db/cassandra/commitlog"
+default[:cassandra][:savedcaches_dir]                 = "/data/db/cassandra/saved_caches"
 default[:cassandra][:listen_addr]                   = "localhost"
 default[:cassandra][:storage_port]                  = 7000
 default[:cassandra][:rpc_addr]                      = "localhost"
@@ -54,11 +54,11 @@ default[:cassandra][:dynamic_snitch]                = 'true'
 default[:cassandra][:initial_token]                 = ""
 default[:cassandra][:seeds]                         = ["127.0.0.1"]
 # Memory, Disk and Performance
-default[:cassandra][:java_min_heap]                 = "128M"        # consider setting equal to max_heap in production
+default[:cassandra][:java_min_heap]                 = "1650M"        # consider setting equal to max_heap in production
 default[:cassandra][:java_max_heap]                 = "1650M"
 default[:cassandra][:disk_access_mode]              = "auto"
 default[:cassandra][:concurrent_reads]              = 8             # 2 per core
-default[:cassandra][:concurrent_writes]             = 32            # typical number of clients
+default[:cassandra][:concurrent_writes]             = 64            # typical number of clients
 default[:cassandra][:memtable_flush_writers]        = 1             # see comment in cassandra.yaml.erb
 default[:cassandra][:sliced_buffer_size]            = 64            # size of column slices
 default[:cassandra][:thrift_framed_transport]       = 15            # default 15; fixes CASSANDRA-475, but make sure your client is happy (Set to nil for debugging)
@@ -77,7 +77,7 @@ default[:cassandra][:rpc_timeout_in_ms]             = 10000
 default[:cassandra][:rpc_keepalive]                 = 'true'
 default[:cassandra][:phi_convict_threshold]         = 8
 default[:cassandra][:request_scheduler]             = 'org.apache.cassandra.scheduler.NoScheduler'
-default[:cassandra][:throttle_limit]                = 80           # 2x (concurrent_reads + concurrent_writes)
+default[:cassandra][:throttle_limit]                = 144           # 2x (concurrent_reads + concurrent_writes)
 default[:cassandra][:request_scheduler_id]          = 'keyspace'
 
 # For install_from_release recipe

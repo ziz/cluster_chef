@@ -25,9 +25,20 @@ exec chpst -u${CASSANDRA_USER} -e /etc/sv/cassandra/env -o 65535 \
       -XX:+CMSParallelRemarkEnabled                             \
       -XX:+HeapDumpOnOutOfMemoryError                           \
       -XX:NewRatio=3                                            \
-      -XX:SurvivorRatio=4                                       \
       -XX:MaxTenuringThreshold=1                                \
       -XX:CMSInitiatingOccupancyFraction=70                     \
+<%- if false %>
+      -XX:+UseCMSInitiatingOccupancyOnly                        \
+      -XX:SurvivorRatio=8                                       \
+      -XX:+UseConcMarkSweepGC                                   \
+      -XX:ParallelCMSThreads=1                                  \
+      -XX:+CMSIncrementalMode                                   \
+      -XX:+CMSIncrementalPacing                                 \
+      -XX:CMSIncrementalDutyCycleMin=0                          \
+      -XX:CMSIncrementalDutyCycle=10                            \
+<%- else %>
+      -XX:SurvivorRatio=4                                       \
+<%- end %>
       -Dcassandra.compaction.priority=1                         \
 <%- if true %>
       -XX:+PrintGCTimeStamps                                    \

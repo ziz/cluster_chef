@@ -43,7 +43,7 @@ echo "`date` Hostname"  >> $progresslog
 # This patches the ec2-set-hostname script to use /etc/hostname (otherwise it
 # crams the ec2-assigned hostname in there regardless)
 cp /usr/bin/ec2-set-hostname /usr/bin/ec2-set-hostname.`date "+%Y%m%d%H"`.orig ;
-wget -nv ${REMOTE_FILE_URL_BASE}/ec2-set-hostname_replacement.py -O /usr/bin/ec2-set-hostname ;
+wget --no-check-certificate -nv ${REMOTE_FILE_URL_BASE}/ec2-set-hostname_replacement.py -O /usr/bin/ec2-set-hostname ;
 chmod a+x /usr/bin/ec2-set-hostname
 
 # unscrewup the hostname every way I can think of. Rabbitmq is a real buttmunch
@@ -63,13 +63,13 @@ if grep -q $PUBLIC_IP /etc/hosts  ; then true ; else bash -c "echo '$PUBLIC_IP $
 sudo gem install --no-rdoc --no-ri chef
 echo "`date` Bootstrap chef server"  >> $progresslog
 echo '{ "chef": { "server_fqdn":"<%= chef_server_fqdn %>", "url_type":"http", "init_style":"runit", "server_port":"4000", "webui_port":"4040", "webui_enabled":true, "path":"/srv/chef", "serve_path":"/srv/chef" }, "run_list": [ "recipe[chef::bootstrap_server]" ] }' > /tmp/chef_server.json ;
-wget -nv ${REMOTE_FILE_URL_BASE}/chef_bootstrap.rb -O /tmp/chef_bootstrap.rb ;
+wget --no-check-certificate -nv ${REMOTE_FILE_URL_BASE}/chef_bootstrap.rb -O /tmp/chef_bootstrap.rb ;
 sudo stop runsvdir ;
 chef-solo -c /tmp/chef_bootstrap.rb -j /tmp/chef_server.json  >> $progresslog
 
 echo "`date` Pulling in chef client and server scripts"  >> $progresslog 
 cp /etc/chef/client.rb /etc/chef/client-orig.rb ;
-wget -nv ${REMOTE_FILE_URL_BASE}/client.rb -O /etc/chef/client.rb ;
+wget --no-check-certificate -nv ${REMOTE_FILE_URL_BASE}/client.rb -O /etc/chef/client.rb ;
 cat > /etc/chef/client-config.json <<EOF
 <%= chef_config[:attributes].to_json %>
 EOF

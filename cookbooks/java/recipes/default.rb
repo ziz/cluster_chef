@@ -30,3 +30,9 @@ java_pkg = value_for_platform(
 package java_pkg do
   action :install
 end
+
+case node[:platform]
+when 'debian', 'ubuntu'    then package "openjdk-6-jdk" do
+    action :install
+  end
+end

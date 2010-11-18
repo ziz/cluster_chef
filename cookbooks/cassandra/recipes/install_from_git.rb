@@ -20,6 +20,7 @@ bash 'install from source' do
   user         'root'
   cwd          cassandra_install_dir
   code <<EOF
+  update-java-alternatives -s java-6-sun
   ant build jar gen-thrift-py
   mv                conf/cassandra.yaml conf/cassandra.yaml.orig
   ln -nfs #{cassandra_install_dir}/conf/* /etc/cassandra/

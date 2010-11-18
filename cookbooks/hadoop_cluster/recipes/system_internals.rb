@@ -14,6 +14,12 @@ end
 set_proc_sys_limit "VM overcommit ratio", '/proc/sys/vm/overcommit_memory', overcommit_memory
 set_proc_sys_limit "VM overcommit memory", '/proc/sys/vm/overcommit_ratio',  overcommit_ratio
 
+# http://www.speedguide.net/articles/linux-tweaking-121
+# recycle is "safer" than reuse
+#set_proc_sys_limit "TCP time-wait reuse", "/proc/sys/net/ipv4/tcp_tw_reuse", 1
+set_proc_sys_limit "TCP time-wait recycle", "/proc/sys/net/ipv4/tcp_tw_recycle", 1
+set_proc_sys_limit "TCP fin timeout", "/proc/sys/net/ipv4/tcp_fin_timeout", 15
+
 
 # recent kernels do away with this limit, so these lines aren't necessary.
 # # http://pero.blogs.aprilmayjune.org/2009/01/22/hadoop-and-linux-kernel-2627-epoll-limits/

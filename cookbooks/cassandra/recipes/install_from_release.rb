@@ -23,6 +23,8 @@ bash 'install from tarball' do
   code <<EOF
   tar xzf /usr/local/src/#{cassandra_install_pkg}
   cd  #{cassandra_install_dir}
+  mv                conf/cassandra.yaml conf/cassandra.yaml.orig
+  ln -nfs #{cassandra_install_dir}/conf/* /etc/cassandra/
   #mv                conf/storage-conf.xml conf/storage-conf.xml.orig
   #ln -nfs /etc/cassandra/storage-conf.xml conf/storage-conf.xml
   if [ -e build.xml ] ; then
@@ -49,3 +51,9 @@ link "/usr/sbin/cassandra" do
   to "/usr/local/share/cassandra/bin/cassandra"
   action :create
 end
+
+link "/usr/local/share/cassandra/conf/log4j.properties" do
+  to "/usr/local/share/cassandra/conf/log4j-server.properties"
+  action :create
+end
+  

@@ -3,13 +3,15 @@ description 'Part of a cassandra database'
 
 run_list *%w[
   java::sunjava
+  xfs
   runit
   boost
   thrift
   python
   cassandra
-  cassandra::install_from_git
+  cassandra::install_from_release
   cassandra::autoconf
+  hadoop_cluster::system_internals
   cassandra::daemon
   ]
 
@@ -22,10 +24,10 @@ override_attributes({
     :cassandra => {
       :auto_bootstrap    => true,
       :jmx_port          => 12345,
-      :concurrent_reads  => 4,
+      :concurrent_reads  => 8,
       :concurrent_writes => 64,
       :commitlog_sync    => 'periodic',
-      :data_file_dirs    => ["/data/db/cassandra"],
+#      :data_file_dirs    => ["/data/db/cassandra"],
     }
   })
 
